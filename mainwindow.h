@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPainter>
+
+#define PX_SCALE 15
 
 namespace Ui {
 class MainWindow;
@@ -14,6 +17,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+protected:
+    void paintEvent(QPaintEvent *event);
 
 private:
     Ui::MainWindow *ui;
