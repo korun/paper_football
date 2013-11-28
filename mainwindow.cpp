@@ -6,6 +6,33 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    FLD_POINT(0, 0) = QPoint(0, 0);
+
+    FLD_POINT(-3, -25) = QPoint(0, 0);
+    FLD_POINT( 3, -25) = QPoint(0, 0);
+    FLD_POINT(-3,  25) = QPoint(0, 0);
+    FLD_POINT( 3,  25) = QPoint(0, 0);
+
+    for(int y = -26; y <= 26; y++){
+        FLD_POINT(-20, y) = QPoint(0, 0);
+        FLD_POINT( 20, y) = QPoint(0, 0);
+        if((y > -20 && y < -2) || (y > 2 && y < 20)){
+            FLD_POINT(y,  26) = QPoint(0, 0);
+            FLD_POINT(y, -26) = QPoint(0, 0);
+        }
+    }
+
+    /*
+    @@points[-3][-25]=Wall.new
+    @@points[3][-25] =Wall.new
+    @@points[-3][25] =Wall.new
+    @@points[3][25] = Wall.new
+    for y in -26..26
+      @@points[-20][y],@@points[20][y] = Wall.new,Wall.new
+      @@points[y][26],@@points[y][-26] = Wall.new,Wall.new if (y > -20 && y < -2) || (y > 2 && y < 20)
+    end
+    */
 }
 
 MainWindow::~MainWindow()
@@ -20,41 +47,27 @@ void MainWindow::paintEvent(QPaintEvent *){
     QPen red_pen(QColor("#f00"), 1);
     QPen std_pen(QColor("#000"), 1);
 
+    int top_offset = ui->menuBar->height();
+
     painter.begin(ui->FieldWidget);
     painter.setPen(light_blue_pen);
-    for(int i = 0; i < 600 / PX_SCALE; i++){
-        painter.drawLine(PX_SCALE * i, 21 + 0, PX_SCALE * i, 21 + 780);
+    for(int i = 0; i < FIELD_WIDTH / PX_SCALE; i++){
+        painter.drawLine(PX_SCALE * i, top_offset, PX_SCALE * i, top_offset + FIELD_HEIGHT);
     }
-    for(int i = 0; i < 780 / PX_SCALE; i++){
-        painter.drawLine(0, 21 + PX_SCALE * i, 600, 21 + PX_SCALE * i);
+    for(int i = 0; i < FIELD_HEIGHT / PX_SCALE; i++){
+        painter.drawLine(0, top_offset + PX_SCALE * i, FIELD_WIDTH, top_offset + PX_SCALE * i);
     }
 
     painter.setPen(blue_pen);
-    painter.drawLine(600 / 2 - PX_SCALE * 3, 21 + 780, 600 / 2 - PX_SCALE * 3, 21 + 780 - PX_SCALE);
-    painter.drawLine(600 / 2 + PX_SCALE * 3, 21 + 780, 600 / 2 + PX_SCALE * 3, 21 + 780 - PX_SCALE);
+    painter.drawLine(FIELD_WIDTH / 2 - PX_SCALE * 3, top_offset + FIELD_HEIGHT, FIELD_WIDTH / 2 - PX_SCALE * 3, top_offset + FIELD_HEIGHT - PX_SCALE);
+    painter.drawLine(FIELD_WIDTH / 2 + PX_SCALE * 3, top_offset + FIELD_HEIGHT, FIELD_WIDTH / 2 + PX_SCALE * 3, top_offset + FIELD_HEIGHT - PX_SCALE);
 
     painter.setPen(red_pen);
-    painter.drawLine(600 / 2 - PX_SCALE * 3, 21 + 0, 600 / 2 - PX_SCALE * 3, 21 + 0 + PX_SCALE);
-    painter.drawLine(600 / 2 + PX_SCALE * 3, 21 + 0, 600 / 2 + PX_SCALE * 3, 21 + 0 + PX_SCALE);
+    painter.drawLine(FIELD_WIDTH / 2 - PX_SCALE * 3, top_offset, FIELD_WIDTH / 2 - PX_SCALE * 3, top_offset + PX_SCALE);
+    painter.drawLine(FIELD_WIDTH / 2 + PX_SCALE * 3, top_offset, FIELD_WIDTH / 2 + PX_SCALE * 3, top_offset + PX_SCALE);
 
     painter.setPen(std_pen);
-    painter.drawEllipse(QPointF(600 / 2, 21 + 1), 1, 1);
-    painter.drawEllipse(QPointF(600 / 2, 21 + 780 - 1), 1, 1);
-    painter.drawEllipse(QPointF(600 / 2, 21 + 780 / 2), 1, 1);
-/*
-    TkcOval.new(canvas, WIDTH/2 + 1, 1, WIDTH/2 - 1, 3) {fill("black")}
-
-    QPointF a[temp_max];
-    sx = this -> width();
-    sy = this -> height();
-    gcx = sx / max;
-    gcy = sy / temp_max;
-    gc = max - min;
-    for (i=0; i<=temp_max; i++){
-        x = (temp[i] - gc) * gcx;
-        y = i * gcy;
-        a[i] = QPointF (x, y);
-    }
-    painter.drawPolyline (a, temp_max);
-*/
+    painter.drawEllipse(QPointF(FIELD_WIDTH / 2, top_offset + 1), 1, 1);
+    painter.drawEllipse(QPointF(FIELD_WIDTH / 2, top_offset + FIELD_HEIGHT - 1), 1, 1);
+    painter.drawEllipse(QPointF(FIELD_WIDTH / 2, top_offset + FIELD_HEIGHT / 2), 1, 1);
 }
