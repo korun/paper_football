@@ -17,7 +17,7 @@ public:
     int x;
     int y;
     bool is_wall = false;
-    FPoint points[8];
+    FPoint *points[8];
 };
 
 #endif // FPOINT_H
