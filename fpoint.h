@@ -11,7 +11,7 @@ class FPoint : public QPoint
 {
 
 public:
-    FPoint(int x, int y, bool is_wall);
+    FPoint(int x, int y, bool is_wall = false);
     ~FPoint();
     int x;
     int y;
