@@ -6,22 +6,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    FLD_POINT(0, 0) = new FPoint(0, 0);
-
-    FLD_POINT(-3, -25) = new FPoint(-3, -25, true);
-    FLD_POINT( 3, -25) = new FPoint( 3, -25, true);
-    FLD_POINT(-3,  25) = new FPoint(-3,  25, true);
-    FLD_POINT( 3,  25) = new FPoint( 3,  25, true);
-
-    for(int y = -26; y <= 26; y++){
-        FLD_POINT(-20, y) = new FPoint(-20, y, true);
-        FLD_POINT( 20, y) = new FPoint(20, y, true);
-        if((y > -20 && y < -2) || (y > 2 && y < 20)){
-            FLD_POINT(y,  26) = new FPoint(y, 26, true);
-            FLD_POINT(y, -26) = new FPoint(y, -26, true);
-        }
-    }
 }
 
 MainWindow::~MainWindow()
@@ -38,6 +22,7 @@ void MainWindow::paintEvent(QPaintEvent *){
 
     int top_offset = ui->menuBar->height();
 
+    // Рисуем сетку
     painter.begin(ui->FieldWidget);
     painter.setPen(light_blue_pen);
     for(int i = 0; i < FIELD_WIDTH / PX_SCALE; i++){
@@ -47,14 +32,17 @@ void MainWindow::paintEvent(QPaintEvent *){
         painter.drawLine(0, top_offset + PX_SCALE * i, FIELD_WIDTH, top_offset + PX_SCALE * i);
     }
 
+    // Рисуем ворота синих
     painter.setPen(blue_pen);
     painter.drawLine(FIELD_WIDTH / 2 - PX_SCALE * 3, top_offset + FIELD_HEIGHT, FIELD_WIDTH / 2 - PX_SCALE * 3, top_offset + FIELD_HEIGHT - PX_SCALE);
     painter.drawLine(FIELD_WIDTH / 2 + PX_SCALE * 3, top_offset + FIELD_HEIGHT, FIELD_WIDTH / 2 + PX_SCALE * 3, top_offset + FIELD_HEIGHT - PX_SCALE);
 
+    // Рисуем ворота красных
     painter.setPen(red_pen);
     painter.drawLine(FIELD_WIDTH / 2 - PX_SCALE * 3, top_offset, FIELD_WIDTH / 2 - PX_SCALE * 3, top_offset + PX_SCALE);
     painter.drawLine(FIELD_WIDTH / 2 + PX_SCALE * 3, top_offset, FIELD_WIDTH / 2 + PX_SCALE * 3, top_offset + PX_SCALE);
 
+    // Рисуем стартовую точку, и точки в воротах
     painter.setPen(std_pen);
     painter.drawEllipse(QPointF(FIELD_WIDTH / 2, top_offset + 1), 1, 1);
     painter.drawEllipse(QPointF(FIELD_WIDTH / 2, top_offset + FIELD_HEIGHT - 1), 1, 1);
