@@ -17,7 +17,7 @@ public:
     Ball(int x, int y);
     ~Ball();
     void step(int x, int y);
-    Ball *clone(int x, int y);
+    Ball *clone(int x = 0, int y = 0);
 };
 
 #endif // BALL_H
