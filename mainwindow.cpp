@@ -22,17 +22,6 @@ MainWindow::MainWindow(QWidget *parent) :
             FLD_POINT(y, -26) = new FPoint(y, -26, true);
         }
     }
-
-    /*
-    @@points[-3][-25]=Wall.new
-    @@points[3][-25] =Wall.new
-    @@points[-3][25] =Wall.new
-    @@points[3][25] = Wall.new
-    for y in -26..26
-      @@points[-20][y],@@points[20][y] = Wall.new,Wall.new
-      @@points[y][26],@@points[y][-26] = Wall.new,Wall.new if (y > -20 && y < -2) || (y > 2 && y < 20)
-    end
-    */
 }
 
 MainWindow::~MainWindow()
