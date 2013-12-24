@@ -11,12 +11,13 @@ class FPoint : public QPoint
 {
 
 public:
+    int     x;
+    int     y;
+    bool    is_wall;
+    FPoint *points[8];
+
     FPoint(int x, int y, bool is_wall = false);
     ~FPoint();
-    int x;
-    int y;
-    bool is_wall;
-    FPoint *points[8];
 };
 
 #endif // FPOINT_H
