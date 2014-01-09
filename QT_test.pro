@@ -14,9 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    fpoint.cpp
+    fpoint.cpp \
+    football_field.cpp
 
 HEADERS  += mainwindow.h \
-    fpoint.h
+    fpoint.h \
+    football_field.h
 
 FORMS    += mainwindow.ui
