@@ -13,6 +13,35 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *e){
+    switch(e->key()){
+        case Qt::Key_1:
+            field.steps.push_back(1);
+            break;
+        case Qt::Key_2:
+            field.steps.push_back(2);
+            break;
+        case Qt::Key_3:
+            field.steps.push_back(3);
+            break;
+        case Qt::Key_4:
+            field.steps.push_back(4);
+            break;
+        case Qt::Key_6:
+            field.steps.push_back(6);
+            break;
+        case Qt::Key_7:
+            field.steps.push_back(7);
+            break;
+        case Qt::Key_8:
+            field.steps.push_back(8);
+            break;
+        case Qt::Key_9:
+            field.steps.push_back(9);
+    }
+    this->repaint();
+}
+
 void MainWindow::paintEvent(QPaintEvent *){
     QPainter painter(this);
     QPen light_blue_pen(QColor("#add8e6"), 1);

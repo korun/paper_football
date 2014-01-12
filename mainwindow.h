@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPainter>
+#include <QKeyEvent>
 
 #include "football_field.h"
 
@@ -24,6 +25,9 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+
+private slots:
+    void keyPressEvent(QKeyEvent *e);
 };
 
 #endif // MAINWINDOW_H
