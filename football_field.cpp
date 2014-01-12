@@ -22,6 +22,8 @@ FootballField::FootballField()
         }
     }
 
+    // Мячик изначально в позиции 0:0
+
     // TODO: remove this test shit
     steps.push_back(8);
     steps.push_back(8);
@@ -36,3 +38,45 @@ FootballField::FootballField()
 
 // Деструктор
 FootballField::~FootballField(){}
+
+bool FootballField::try_step(int key){
+    if (can_step(KEYS[key][0], KEYS[key][1])){
+        signed char x = ball.x + KEYS[key][0],
+                    y = ball.y + KEYS[key][1];
+        steps.push_back(key);
+        FLD_POINT(x, y) = new FPoint(x, y);
+        FLD_POINT(x, y)->push(new FPoint(ball.x, ball.y));
+        FLD_POINT(ball.x, ball.y)->push(FLD_POINT(x, y));
+        ball.step(KEYS[key][0], KEYS[key][1]);
+        return true;
+    }
+    return false;
+}
+
+bool FootballField::can_step(signed char x, signed char y){
+    int new_x = ball.x + x,
+        new_y = ball.y + y;
+    if (FLD_POINT(new_x, new_y) != NULL && FLD_POINT(new_x, new_y)->is_wall)
+        return false;
+    return (FLD_POINT(new_x, new_y) == NULL) && (!(abs(x) == 1 && abs(y) == 1) || diagstep(x, y));
+}
+
+bool FootballField::diagstep(signed char x, signed char y){
+    int new_x = ball.x + x,
+        new_y = ball.y + y;
+    if      (x ==  1 && y ==  1)
+        return can_diagstep(new_x, new_y + 1, new_x + 1, new_y);
+    else if (x ==  1 && y == -1)
+        return can_diagstep(new_x + 1, new_y, new_x, new_y - 1);
+    else if (x == -1 && y == -1)
+        return can_diagstep(new_x, new_y - 1, new_x - 1, new_y);
+    else if (x == -1 && y ==  1)
+        return can_diagstep(new_x - 1, new_y, new_x, new_y + 1);
+    return false;
+}
+
+bool FootballField::can_diagstep(signed char bx, signed char by, signed char ex, signed char ey){
+    if (FLD_POINT(bx, by) == NULL || FLD_POINT(bx, by)->is_wall || FLD_POINT(ex, ey)->is_wall)
+        return true;
+    return !(FLD_POINT(bx, by)->include(ex, ey));
+}

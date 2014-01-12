@@ -15,8 +15,6 @@ class FootballField
 {
 
 public:
-    //const int GATE1[5][2] = {{2, -26}, {1, -26}, {0, -26}, {-1, -26}, {-2, -26}};
-    //const int GATE2[5][2] = {{2, 26}, {1, 26}, {0, 26}, {-1, 26}, {-2, 26}};
     const signed char KEYS[10][2] = {
         { 0,  0}, // 0 - unused
         { 1, -1}, // 1
@@ -35,6 +33,15 @@ public:
 
     FootballField();
     ~FootballField();
+    bool try_step(int key);
+
+protected:
+    Ball ball;
+
+private:
+    bool can_step(signed char x, signed char y);
+    bool diagstep(signed char x, signed char y);
+    bool can_diagstep(signed char bx, signed char by, signed char ex, signed char ey);
 };
 
 #endif // FFIELD_H

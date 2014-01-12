@@ -14,32 +14,34 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e){
+    bool success = false;
     switch(e->key()){
         case Qt::Key_1:
-            field.steps.push_back(1);
+            success = field.try_step(1);
             break;
         case Qt::Key_2:
-            field.steps.push_back(2);
+            success = field.try_step(2);
             break;
         case Qt::Key_3:
-            field.steps.push_back(3);
+            success = field.try_step(3);
             break;
         case Qt::Key_4:
-            field.steps.push_back(4);
+            success = field.try_step(4);
             break;
         case Qt::Key_6:
-            field.steps.push_back(6);
+            success = field.try_step(6);
             break;
         case Qt::Key_7:
-            field.steps.push_back(7);
+            success = field.try_step(7);
             break;
         case Qt::Key_8:
-            field.steps.push_back(8);
+            success = field.try_step(8);
             break;
         case Qt::Key_9:
-            field.steps.push_back(9);
+            success = field.try_step(9);
     }
-    this->repaint();
+    if (success)
+        this->repaint();
 }
 
 void MainWindow::paintEvent(QPaintEvent *){

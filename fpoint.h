@@ -18,6 +18,8 @@ public:
 
     FPoint(int x, int y, bool is_wall = false);
     ~FPoint();
+    bool include(int x, int y);
+    bool push(FPoint *point);
 };
 
 #endif // FPOINT_H
