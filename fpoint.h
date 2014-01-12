@@ -14,7 +14,7 @@ public:
     int     x;
     int     y;
     bool    is_wall;
-    FPoint *points[8];
+    FPoint *points[8] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
     FPoint(int x, int y, bool is_wall = false);
     ~FPoint();

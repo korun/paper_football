@@ -3,6 +3,13 @@
 // Конструктор
 FootballField::FootballField()
 {
+    // Зануляем массив.
+    for(int i = 0; i < FIELD_WIDTH / PX_SCALE; i++){
+        for(int j = 0; j < FIELD_HEIGHT / PX_SCALE; j++){
+            points[i][j] = NULL;
+        }
+    }
+
     // Стартовая точка.
     FLD_POINT(0, 0) = new FPoint(0, 0);
 
@@ -23,17 +30,6 @@ FootballField::FootballField()
     }
 
     // Мячик изначально в позиции 0:0
-
-    // TODO: remove this test shit
-    steps.push_back(8);
-    steps.push_back(8);
-    steps.push_back(8);
-    steps.push_back(-1);
-    steps.push_back(-2);
-    steps.push_back(-2);
-    steps.push_back(7);
-    steps.push_back(7);
-    steps.push_back(6);
 }
 
 // Деструктор
@@ -45,7 +41,7 @@ bool FootballField::try_step(int key){
                     y = ball.y + KEYS[key][1];
         steps.push_back(key);
         FLD_POINT(x, y) = new FPoint(x, y);
-        FLD_POINT(x, y)->push(new FPoint(ball.x, ball.y));
+        FLD_POINT(x, y)->push(FLD_POINT(ball.x, ball.y));
         FLD_POINT(ball.x, ball.y)->push(FLD_POINT(x, y));
         ball.step(KEYS[key][0], KEYS[key][1]);
         return true;

@@ -18,6 +18,8 @@ bool FPoint::include(int x, int y){
 }
 
 bool FPoint::push(FPoint *point){
+    if(point == NULL)
+        return false;
     for(int i = 0; i < 8; i++){
         if (points[i] == NULL){
             points[i] = point;
