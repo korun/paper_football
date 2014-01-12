@@ -21,6 +21,17 @@ FootballField::FootballField()
             FLD_POINT(y, -26) = new FPoint(y, -26, true);
         }
     }
+
+    // TODO: remove this test shit
+    steps.push_back(8);
+    steps.push_back(8);
+    steps.push_back(8);
+    steps.push_back(-1);
+    steps.push_back(-2);
+    steps.push_back(-2);
+    steps.push_back(7);
+    steps.push_back(7);
+    steps.push_back(6);
 }
 
 // Деструктор

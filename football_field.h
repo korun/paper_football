@@ -17,6 +17,19 @@ class FootballField
 public:
     //const int GATE1[5][2] = {{2, -26}, {1, -26}, {0, -26}, {-1, -26}, {-2, -26}};
     //const int GATE2[5][2] = {{2, 26}, {1, 26}, {0, 26}, {-1, 26}, {-2, 26}};
+    const signed char KEYS[10][2] = {
+        { 0,  0}, // 0 - unused
+        { 1, -1}, // 1
+        { 0, -1}, // 2
+        {-1, -1}, // 3
+        { 1,  0}, // 4
+        { 0,  0}, // 5 - unused
+        {-1,  0}, // 6
+        { 1,  1}, // 7
+        { 0,  1}, // 8
+        {-1,  1}  // 9
+    };
+
     FPoint *points[FIELD_WIDTH / PX_SCALE][FIELD_HEIGHT / PX_SCALE]; /* [x, y] */
     std::vector<signed char> steps;
 

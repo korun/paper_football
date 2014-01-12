@@ -47,4 +47,18 @@ void MainWindow::paintEvent(QPaintEvent *){
     painter.drawEllipse(QPointF(FIELD_WIDTH / 2, top_offset + 1), 1, 1);
     painter.drawEllipse(QPointF(FIELD_WIDTH / 2, top_offset + FIELD_HEIGHT - 1), 1, 1);
     painter.drawEllipse(QPointF(FIELD_WIDTH / 2, top_offset + FIELD_HEIGHT / 2), 1, 1);
+
+    int old_x = FIELD_WIDTH  / 2,
+        old_y = FIELD_HEIGHT / 2;
+    std::vector<signed char>::iterator iterator = field.steps.begin();
+    while (iterator != field.steps.end()) {
+        int index = abs((int) *iterator);
+        int x = old_x - PX_SCALE * field.KEYS[index][0];
+        int y = old_y - PX_SCALE * field.KEYS[index][1];
+        painter.setPen(*iterator < 0 ? red_pen : blue_pen);
+        painter.drawLine(old_x, top_offset + old_y, x, top_offset + y);
+        old_x = x;
+        old_y = y;
+        ++iterator;
+    }
 }
