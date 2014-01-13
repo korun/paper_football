@@ -39,7 +39,14 @@ FootballField::FootballField()
 }
 
 // Деструктор
-FootballField::~FootballField(){}
+FootballField::~FootballField(){
+    //
+    for(int i = 0; i < FIELD_WIDTH / PX_SCALE + 1; i++){
+        for(int j = 0; j < FIELD_HEIGHT / PX_SCALE + 1; j++){
+            delete points[i][j];
+        }
+    }
+}
 
 bool FootballField::try_step(int key){
     if (gameover)
