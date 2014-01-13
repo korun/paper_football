@@ -60,6 +60,7 @@ bool FootballField::can_step(signed char x, signed char y){
 bool FootballField::diagstep(signed char x, signed char y){
     int new_x = ball.x + x,
         new_y = ball.y + y;
+    // Находим пересекаемую диагональ
     if      (x ==  1 && y ==  1)
         return can_diagstep(new_x, new_y + 1, new_x + 1, new_y);
     else if (x ==  1 && y == -1)
@@ -72,7 +73,8 @@ bool FootballField::diagstep(signed char x, signed char y){
 }
 
 bool FootballField::can_diagstep(signed char bx, signed char by, signed char ex, signed char ey){
-    if (FLD_POINT(bx, by) == NULL || FLD_POINT(bx, by)->is_wall || FLD_POINT(ex, ey)->is_wall)
+    if (FLD_POINT(bx, by) == NULL  || FLD_POINT(ex, ey) == NULL || // Если хоть одна из точек пустая
+        FLD_POINT(bx, by)->is_wall || FLD_POINT(ex, ey)->is_wall)  // или является стеной
         return true;
     return !(FLD_POINT(bx, by)->include(ex, ey));
 }
