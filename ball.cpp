@@ -11,9 +11,4 @@ void Ball::step(int new_x, int new_y)
     y += new_y;
 }
 
-Ball *Ball::clone(int new_x, int new_y)
-{
-    return new Ball(x + new_x, y + new_y);
-}
-
 Ball::~Ball(){}
