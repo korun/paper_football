@@ -34,12 +34,17 @@ FootballField::FootballField()
     // Мячик изначально в позиции 0:0
     current_step = 1;
     current_player = 1; // 1 (blue) -1 (red)
+    penalty_mode = false;
 }
 
 // Деструктор
 FootballField::~FootballField(){}
 
 bool FootballField::try_step(int key){
+    if (penalty_mode){
+        return try_penalty(key);
+    }
+
     if (can_step(KEYS[key][0], KEYS[key][1])){
         signed char x = ball.x + KEYS[key][0],
                     y = ball.y + KEYS[key][1];
@@ -48,16 +53,60 @@ bool FootballField::try_step(int key){
         FLD_POINT(x, y)->push(FLD_POINT(ball.x, ball.y));
         FLD_POINT(ball.x, ball.y)->push(FLD_POINT(x, y));
         ball.step(KEYS[key][0], KEYS[key][1]);
-        if(current_step++ == 3){
+        if(penalty_kick()){
+            qDebug() << "PENALTY";
+        }
+        else if(current_step == 3){
             current_player *= -1;
             current_step = 1;
         }
+        else
+            ++current_step;
+
         qDebug() << "-------- " << steps.size() << " --------";
         qDebug() << "can_move_1x? " << can_move_1x() << "\n";
         qDebug() << "can_move_3x? " << can_move_3x() << "\n";
         return true;
     }
     return false;
+}
+
+bool FootballField::try_penalty(int key){
+    signed char x = ball.x + KEYS[key][0],
+                y = ball.y + KEYS[key][1];
+    // Validates
+    for(int i = 0; i < 6; i++){
+        if (FLD_POINT(x, y) != NULL && FLD_POINT(x, y)->is_wall)
+            return false;
+        x += KEYS[key][0];
+        y += KEYS[key][1];
+    }
+
+    // return to first point
+    x = ball.x + KEYS[key][0];
+    y = ball.y + KEYS[key][1];
+    // Real ball moves
+    for(int i = 0; i < 6; i++){
+        steps.push_back(key * current_player);
+        if(FLD_POINT(x, y) == NULL)
+            FLD_POINT(x, y) = new FPoint(x, y);
+        FLD_POINT(x, y)->push(FLD_POINT(ball.x, ball.y));
+        FLD_POINT(ball.x, ball.y)->push(FLD_POINT(x, y));
+        ball.step(KEYS[key][0], KEYS[key][1]);
+        x += KEYS[key][0];
+        y += KEYS[key][1];
+    }
+
+    if(penalty_kick()){
+        qDebug() << "one more PENALTY";
+    }
+    else if (current_step == 3) {
+        current_player *= -1;
+        current_step = 1;
+    }
+    else
+        ++current_step;
+    return true;
 }
 
 bool FootballField::can_step(signed char x, signed char y){
@@ -86,6 +135,21 @@ bool FootballField::can_diagstep(signed char bx, signed char by, signed char ex,
         FLD_POINT(bx, by)->is_wall || FLD_POINT(ex, ey)->is_wall)  // или является стеной
         return true;
     return !(FLD_POINT(bx, by)->include(ex, ey));
+}
+
+bool FootballField::penalty_kick(){
+    if(current_step == 3){
+        penalty_mode = !can_move_3x();
+    }
+    else {
+        penalty_mode = !can_move_1x();
+        if(penalty_mode){
+            // You has clamped yourself!!!
+            current_player *= -1;
+            current_step = 3;
+        }
+    }
+    return penalty_mode;
 }
 
 bool FootballField::can_move_1x(){

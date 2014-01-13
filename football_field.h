@@ -39,13 +39,16 @@ protected:
     Ball ball;
 
 private:
+    bool try_penalty(int key);
     bool can_step(signed char x, signed char y);
     bool diagstep(signed char x, signed char y);
     bool can_diagstep(signed char bx, signed char by, signed char ex, signed char ey);
     bool can_move_1x();
     bool can_move_3x();
+    bool penalty_kick();
     signed char   current_step;
     unsigned char current_player;
+    bool          penalty_mode;
 };
 
 #endif // FFIELD_H
