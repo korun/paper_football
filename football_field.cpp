@@ -100,9 +100,9 @@ bool FootballField::can_move_3x(){
     for(int i = 1; i <= 9; i++){
         if(i == 5) continue;
         for(int j = 1; j <= 9; j++){
-            if(j == 5 || j == keycontrast(j)) continue;
+            if(j == 5 || j == keycontrast(i)) continue;
             for(int k = 1; k <= 9; k++){
-                if(k == 5 || k == keycontrast(k)) continue;
+                if(k == 5 || k == keycontrast(j)) continue;
 
                 if(!can_step(KEYS[i][0], KEYS[i][1])) continue;
 
