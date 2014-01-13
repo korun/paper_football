@@ -58,17 +58,15 @@ bool FootballField::can_step(signed char x, signed char y){
 }
 
 bool FootballField::diagstep(signed char x, signed char y){
-    int new_x = ball.x + x,
-        new_y = ball.y + y;
     // Находим пересекаемую диагональ
     if      (x ==  1 && y ==  1)
-        return can_diagstep(new_x, new_y + 1, new_x + 1, new_y);
+        return can_diagstep(ball.x, ball.y + 1, ball.x + 1, ball.y);
     else if (x ==  1 && y == -1)
-        return can_diagstep(new_x + 1, new_y, new_x, new_y - 1);
+        return can_diagstep(ball.x + 1, ball.y, ball.x, ball.y - 1);
     else if (x == -1 && y == -1)
-        return can_diagstep(new_x, new_y - 1, new_x - 1, new_y);
+        return can_diagstep(ball.x, ball.y - 1, ball.x - 1, ball.y);
     else if (x == -1 && y ==  1)
-        return can_diagstep(new_x - 1, new_y, new_x, new_y + 1);
+        return can_diagstep(ball.x - 1, ball.y, ball.x, ball.y + 1);
     return false;
 }
 
