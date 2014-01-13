@@ -54,7 +54,6 @@ void MainWindow::paintEvent(QPaintEvent *){
     int top_offset = ui->menuBar->height();
 
     // Рисуем сетку
-    painter.begin(ui->FieldWidget);
     painter.setPen(light_blue_pen);
     for(int i = 0; i < FIELD_WIDTH / PX_SCALE; i++){
         painter.drawLine(PX_SCALE * i, top_offset, PX_SCALE * i, top_offset + FIELD_HEIGHT);
