@@ -1,6 +1,9 @@
 #include "football_field.h"
 #include <QDebug>
+
 #define keycontrast(KEY) (10 - (KEY))
+#define red_win(X, Y) ((Y) == -26 && (X) <= 2 && (X) >= -2)
+#define blue_win(X, Y) ((Y) == 26 && (X) <= 2 && (X) >= -2)
 
 // Конструктор
 FootballField::FootballField()
@@ -32,15 +35,16 @@ FootballField::FootballField()
     }
 
     // Мячик изначально в позиции 0:0
-    current_step = 1;
     current_player = 1; // 1 (blue) -1 (red)
-    penalty_mode = false;
 }
 
 // Деструктор
 FootballField::~FootballField(){}
 
 bool FootballField::try_step(int key){
+    if (gameover)
+        return false;
+
     if (penalty_mode){
         return try_penalty(key);
     }
@@ -48,6 +52,20 @@ bool FootballField::try_step(int key){
     if (can_step(KEYS[key][0], KEYS[key][1])){
         signed char x = ball.x + KEYS[key][0],
                     y = ball.y + KEYS[key][1];
+        if(red_win(x, y)){
+            qDebug() << "red player winner!\n";
+            gameover = true;
+            show_ball = false;
+        }
+        if(blue_win(x, y)){
+            qDebug() << "blue player winner!\n";
+            gameover = true;
+            show_ball = false;
+        }
+        if(gameover){
+            steps.push_back(key * current_player);
+            return true;
+        }
         steps.push_back(key * current_player);
         FLD_POINT(x, y) = new FPoint(x, y);
         FLD_POINT(x, y)->push(FLD_POINT(ball.x, ball.y));
@@ -78,6 +96,21 @@ bool FootballField::try_penalty(int key){
     for(int i = 0; i < 6; i++){
         if (FLD_POINT(x, y) != NULL && FLD_POINT(x, y)->is_wall)
             return false;
+        if(red_win(x, y)){
+            qDebug() << "red player winner!\n";
+            gameover = true;
+            show_ball = false;
+        }
+        if(blue_win(x, y)){
+            qDebug() << "blue player winner!\n";
+            gameover = true;
+            show_ball = false;
+        }
+        if(gameover){
+            for(; i >= 0; i--)
+                steps.push_back(key * current_player);
+            return true;
+        }
         x += KEYS[key][0];
         y += KEYS[key][1];
     }
