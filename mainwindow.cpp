@@ -91,4 +91,7 @@ void MainWindow::paintEvent(QPaintEvent *){
         old_y = y;
         ++iterator;
     }
+    // Ball marker
+    painter.setPen(std_pen);
+    painter.drawEllipse(QPointF(old_x, top_offset + old_y), 2, 2);
 }
