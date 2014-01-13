@@ -42,6 +42,8 @@ private:
     bool can_step(signed char x, signed char y);
     bool diagstep(signed char x, signed char y);
     bool can_diagstep(signed char bx, signed char by, signed char ex, signed char ey);
+    bool can_move_1x();
+    bool can_move_3x();
     signed char   current_step;
     unsigned char current_player;
 };

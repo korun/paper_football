@@ -1,4 +1,6 @@
 #include "football_field.h"
+#include <QDebug>
+#define keycontrast(KEY) (10 - (KEY))
 
 // Конструктор
 FootballField::FootballField()
@@ -50,6 +52,9 @@ bool FootballField::try_step(int key){
             current_player *= -1;
             current_step = 1;
         }
+        qDebug() << "-------- " << steps.size() << " --------";
+        qDebug() << "can_move_1x? " << can_move_1x() << "\n";
+        qDebug() << "can_move_3x? " << can_move_3x() << "\n";
         return true;
     }
     return false;
@@ -81,4 +86,39 @@ bool FootballField::can_diagstep(signed char bx, signed char by, signed char ex,
         FLD_POINT(bx, by)->is_wall || FLD_POINT(ex, ey)->is_wall)  // или является стеной
         return true;
     return !(FLD_POINT(bx, by)->include(ex, ey));
+}
+
+bool FootballField::can_move_1x(){
+    for(int i = 1; i <= 9; i++){
+        if(i == 5) continue;
+        if(can_step(KEYS[i][0], KEYS[i][1])) return true;
+    }
+    return false;
+}
+
+bool FootballField::can_move_3x(){
+    for(int i = 1; i <= 9; i++){
+        if(i == 5) continue;
+        for(int j = 1; j <= 9; j++){
+            if(j == 5 || j == keycontrast(j)) continue;
+            for(int k = 1; k <= 9; k++){
+                if(k == 5 || k == keycontrast(k)) continue;
+
+                if(!can_step(KEYS[i][0], KEYS[i][1])) continue;
+
+                ball.step(KEYS[i][0], KEYS[i][1]);
+                if(!can_step(KEYS[j][0], KEYS[j][1])){
+                    ball.step(KEYS[keycontrast(i)][0], KEYS[keycontrast(i)][1]);
+                    continue;
+                }
+
+                ball.step(KEYS[j][0], KEYS[j][1]);
+                bool result = can_step(KEYS[k][0], KEYS[k][1]);
+                ball.step(KEYS[keycontrast(j)][0], KEYS[keycontrast(j)][1]);
+                ball.step(KEYS[keycontrast(i)][0], KEYS[keycontrast(i)][1]);
+                if(result) return true;
+            }
+        }
+    }
+    return false;
 }

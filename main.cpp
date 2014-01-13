@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include <QDebug>       // TODO remove in production
 
 int main(int argc, char *argv[])
 {
