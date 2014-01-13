@@ -31,6 +31,8 @@ public:
     FPoint *points[FIELD_WIDTH / PX_SCALE + 1][FIELD_HEIGHT / PX_SCALE + 1]; /* [x, y] */
     std::vector<signed char> steps;
     bool show_ball = true;
+    signed char current_player;
+    bool        penalty_mode = false;
 
     FootballField();
     ~FootballField();
@@ -47,9 +49,7 @@ private:
     bool can_move_1x();
     bool can_move_3x();
     bool penalty_kick();
-    signed char   current_step = 1;
-    unsigned char current_player;
-    bool          penalty_mode = false;
+    unsigned char current_step = 1;
     bool          gameover     = false;
 };
 

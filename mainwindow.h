@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QPainter>
 #include <QKeyEvent>
+#include <QMessageBox>
 
 #include "football_field.h"
 

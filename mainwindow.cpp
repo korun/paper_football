@@ -15,6 +15,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::keyPressEvent(QKeyEvent *e){
     bool success = false;
+    signed char pl = field.current_player;
     switch(e->key()){
         case Qt::Key_Z:
         case Qt::Key_1:
@@ -48,8 +49,18 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
         case Qt::Key_9:
             success = field.try_step(9);
     }
-    if (success)
+    if (success){
         this->repaint();
+        if(pl != field.current_player){
+            if(field.current_player < 0)
+                QMessageBox::information(this, tr("Information"), tr("Red player kicks"));
+            else
+                QMessageBox::information(this, tr("Information"), tr("blue player kicks"));
+        }
+        if(field.penalty_mode){
+            QMessageBox::information(this, tr("Information"), tr("PENALTY!"));
+        }
+    }
 }
 
 void MainWindow::paintEvent(QPaintEvent *){
