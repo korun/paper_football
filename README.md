@@ -1,4 +1,4 @@
-QT_test
+Paper football
 =======
 
-QT-library test
+The paper football game
