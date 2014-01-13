@@ -16,27 +16,35 @@ MainWindow::~MainWindow()
 void MainWindow::keyPressEvent(QKeyEvent *e){
     bool success = false;
     switch(e->key()){
+        case Qt::Key_Z:
         case Qt::Key_1:
             success = field.try_step(1);
             break;
+        case Qt::Key_X:
         case Qt::Key_2:
             success = field.try_step(2);
             break;
+        case Qt::Key_C:
         case Qt::Key_3:
             success = field.try_step(3);
             break;
+        case Qt::Key_A:
         case Qt::Key_4:
             success = field.try_step(4);
             break;
+        case Qt::Key_D:
         case Qt::Key_6:
             success = field.try_step(6);
             break;
+        case Qt::Key_Q:
         case Qt::Key_7:
             success = field.try_step(7);
             break;
+        case Qt::Key_W:
         case Qt::Key_8:
             success = field.try_step(8);
             break;
+        case Qt::Key_E:
         case Qt::Key_9:
             success = field.try_step(9);
     }
