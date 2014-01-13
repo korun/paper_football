@@ -30,6 +30,8 @@ FootballField::FootballField()
     }
 
     // Мячик изначально в позиции 0:0
+    current_step = 1;
+    current_player = 1; // 1 (blue) -1 (red)
 }
 
 // Деструктор
@@ -39,11 +41,15 @@ bool FootballField::try_step(int key){
     if (can_step(KEYS[key][0], KEYS[key][1])){
         signed char x = ball.x + KEYS[key][0],
                     y = ball.y + KEYS[key][1];
-        steps.push_back(key);
+        steps.push_back(key * current_player);
         FLD_POINT(x, y) = new FPoint(x, y);
         FLD_POINT(x, y)->push(FLD_POINT(ball.x, ball.y));
         FLD_POINT(ball.x, ball.y)->push(FLD_POINT(x, y));
         ball.step(KEYS[key][0], KEYS[key][1]);
+        if(current_step++ == 3){
+            current_player *= -1;
+            current_step = 1;
+        }
         return true;
     }
     return false;

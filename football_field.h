@@ -42,6 +42,8 @@ private:
     bool can_step(signed char x, signed char y);
     bool diagstep(signed char x, signed char y);
     bool can_diagstep(signed char bx, signed char by, signed char ex, signed char ey);
+    signed char   current_step;
+    unsigned char current_player;
 };
 
 #endif // FFIELD_H
