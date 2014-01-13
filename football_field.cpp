@@ -4,8 +4,8 @@
 FootballField::FootballField()
 {
     // Зануляем массив.
-    for(int i = 0; i < FIELD_WIDTH / PX_SCALE; i++){
-        for(int j = 0; j < FIELD_HEIGHT / PX_SCALE; j++){
+    for(int i = 0; i < FIELD_WIDTH / PX_SCALE + 1; i++){
+        for(int j = 0; j < FIELD_HEIGHT / PX_SCALE + 1; j++){
             points[i][j] = NULL;
         }
     }

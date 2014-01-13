@@ -7,8 +7,8 @@
 #define PX_SCALE     15
 #define FIELD_WIDTH  600
 #define FIELD_HEIGHT 780
-#define PW_CENTER    (FIELD_WIDTH  / PX_SCALE / 2 + 1)
-#define PH_CENTER    (FIELD_HEIGHT / PX_SCALE / 2 - 1)
+#define PW_CENTER    (FIELD_WIDTH  / PX_SCALE / 2)
+#define PH_CENTER    (FIELD_HEIGHT / PX_SCALE / 2)
 #define FLD_POINT(X, Y) (points[PW_CENTER + (X)][PH_CENTER + (Y)])
 
 class FootballField
@@ -28,7 +28,7 @@ public:
         {-1,  1}  // 9
     };
 
-    FPoint *points[FIELD_WIDTH / PX_SCALE][FIELD_HEIGHT / PX_SCALE]; /* [x, y] */
+    FPoint *points[FIELD_WIDTH / PX_SCALE + 1][FIELD_HEIGHT / PX_SCALE + 1]; /* [x, y] */
     std::vector<signed char> steps;
 
     FootballField();
