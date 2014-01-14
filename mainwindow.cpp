@@ -138,8 +138,8 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
     int top_offset = ui->menuBar->height();
     int mx = event->pos().x(),
         my = event->pos().y(),
-        bx = FIELD_WIDTH  / 2 - PX_SCALE * field.ball.x,
-        by = FIELD_HEIGHT / 2 - PX_SCALE * field.ball.y + top_offset;
+        bx = FIELD_WIDTH  / 2 - PX_SCALE * field->ball.x,
+        by = FIELD_HEIGHT / 2 - PX_SCALE * field->ball.y + top_offset;
     int local_mx = mx % PX_SCALE,
         local_my = (my - top_offset) % PX_SCALE;
     if((mx <= bx + PX_SCALE * 3 + PX_SCALE / 3 && mx >= bx - PX_SCALE * 3 - PX_SCALE / 3) && // mouse x in -3..3
