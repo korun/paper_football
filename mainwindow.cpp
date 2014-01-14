@@ -194,8 +194,8 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
 
 qint32 MainWindow::get_key_from_coord(int x, int y){
     int top_offset = ui->menuBar->height();
-    int bx = FIELD_WIDTH  / 2 - PX_SCALE * field.ball.x,
-        by = FIELD_HEIGHT / 2 - PX_SCALE * field.ball.y + top_offset;
+    int bx = FIELD_WIDTH  / 2 - PX_SCALE * field->ball.x,
+        by = FIELD_HEIGHT / 2 - PX_SCALE * field->ball.y + top_offset;
 
     // Don't move - this is a ball-point
     if(x == bx && y == by) return Qt::Key_5;
