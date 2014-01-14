@@ -138,9 +138,9 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
     if((mx <= bx + PX_SCALE * 3 + PX_SCALE / 3 && mx >= bx - PX_SCALE * 3 - PX_SCALE / 3) && // mouse x in -3..3
        (my <= by + PX_SCALE * 3 + PX_SCALE / 3 && my >= by - PX_SCALE * 3 - PX_SCALE / 3)    // mouse y in -3..3
     ){
-        if((local_mx <= PX_SCALE / 3 || local_mx >= PX_SCALE / 3 * 2)                     && // x and y can cling to grid point
-           (local_my <= PX_SCALE / 3 || local_my >= PX_SCALE / 3 * 2)){
-            //qDebug() << "mouseMoveEvent!" << QString::number(mx) << "" << QString::number(my) << "\n";
+        if((local_mx <= PX_SCALE / 3 || local_mx >= PX_SCALE / 3 * 2) && // x and y can cling to grid point
+           (local_my <= PX_SCALE / 3 || local_my >= PX_SCALE / 3 * 2)
+        ){
             if(local_mx <= PX_SCALE / 3)
                 mx -= local_mx;
             else // if(local_mx >= PX_SCALE / 3 * 2)
@@ -172,14 +172,37 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *event){
     if(show_pointer && event->button() == Qt::LeftButton){
-        qDebug() << "Clicked!\n";
-        QKeyEvent key(QEvent::KeyPress, Qt::Key_8, Qt::NoModifier);
-        QApplication::sendEvent(this, &key);
-        if (key.isAccepted()) {
-            //everything is ok
+        qint32 key_num = get_key_from_coord(mouse_pointer.x(), mouse_pointer.y());
+        if(key_num == Qt::Key_5){
+            qDebug() << "Ball position!\n";
+            return;
         }
-        else {
+        QKeyEvent key(QEvent::KeyPress, key_num, Qt::NoModifier);
+        QApplication::sendEvent(this, &key);
+
+        if (!key.isAccepted()) {
             qDebug() << "something wrong\n";
         }
     }
+}
+
+qint32 MainWindow::get_key_from_coord(int x, int y){
+    int top_offset = ui->menuBar->height();
+    int bx = FIELD_WIDTH  / 2 - PX_SCALE * field.ball.x,
+        by = FIELD_HEIGHT / 2 - PX_SCALE * field.ball.y + top_offset;
+
+    // Don't move - this is a ball-point
+    if(x == bx && y == by) return Qt::Key_5;
+
+    if(x <  bx && y >  by) return Qt::Key_1;
+    if(x == bx && y >  by) return Qt::Key_2;
+    if(x >  bx && y >  by) return Qt::Key_3;
+    if(x <  bx && y == by) return Qt::Key_4;
+    if(x >  bx && y == by) return Qt::Key_6;
+    if(x <  bx && y <  by) return Qt::Key_7;
+    if(x == bx && y <  by) return Qt::Key_8;
+    if(x >  bx && y <  by) return Qt::Key_9;
+
+    // just in case
+    return Qt::Key_5;
 }

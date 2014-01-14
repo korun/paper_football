@@ -34,6 +34,7 @@ private:
 
 private slots:
     void keyPressEvent(QKeyEvent *e);
+    qint32 get_key_from_coord(int x, int y);
 };
 
 #endif // MAINWINDOW_H

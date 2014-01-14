@@ -88,9 +88,6 @@ bool FootballField::try_step(int key){
         else
             ++current_step;
 
-        // qDebug() << "-------- " << steps.size() << " --------";
-        // qDebug() << "can_move_1x? " << can_move_1x() << "\n";
-        // qDebug() << "can_move_3x? " << can_move_3x() << "\n";
         return true;
     }
     return false;
