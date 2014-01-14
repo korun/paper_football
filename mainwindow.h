@@ -24,6 +24,7 @@ protected:
     FootballField field;
     void paintEvent(QPaintEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 private:
     Ui::MainWindow *ui;

@@ -136,29 +136,50 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
     int local_mx = mx % PX_SCALE,
         local_my = (my - top_offset) % PX_SCALE;
     if((mx <= bx + PX_SCALE * 3 + PX_SCALE / 3 && mx >= bx - PX_SCALE * 3 - PX_SCALE / 3) && // mouse x in -3..3
-       (my <= by + PX_SCALE * 3 + PX_SCALE / 3 && my >= by - PX_SCALE * 3 - PX_SCALE / 3) && // mouse y in -3..3
-       (local_mx <= PX_SCALE / 3 || local_mx >= PX_SCALE / 3 * 2)                         && // x and y can cling to grid point
-       (local_my <= PX_SCALE / 3 || local_my >= PX_SCALE / 3 * 2)
+       (my <= by + PX_SCALE * 3 + PX_SCALE / 3 && my >= by - PX_SCALE * 3 - PX_SCALE / 3)    // mouse y in -3..3
     ){
-        qDebug() << "mouseMoveEvent!" << QString::number(mx) << "" << QString::number(my) << "\n";
-        if(local_mx <= PX_SCALE / 3)
-            mx -= local_mx;
-        else // if(local_mx >= PX_SCALE / 3 * 2)
-            mx += PX_SCALE - local_mx;
-        if(local_my <= PX_SCALE / 3)
-            my -= local_my;
-        else // if(local_my >= PX_SCALE / 3 * 2)
-            my += PX_SCALE - local_my;
+        if((local_mx <= PX_SCALE / 3 || local_mx >= PX_SCALE / 3 * 2)                     && // x and y can cling to grid point
+           (local_my <= PX_SCALE / 3 || local_my >= PX_SCALE / 3 * 2)){
+            //qDebug() << "mouseMoveEvent!" << QString::number(mx) << "" << QString::number(my) << "\n";
+            if(local_mx <= PX_SCALE / 3)
+                mx -= local_mx;
+            else // if(local_mx >= PX_SCALE / 3 * 2)
+                mx += PX_SCALE - local_mx;
+            if(local_my <= PX_SCALE / 3)
+                my -= local_my;
+            else // if(local_my >= PX_SCALE / 3 * 2)
+                my += PX_SCALE - local_my;
 
-        show_pointer = true;
+            show_pointer = true;
 
-        mouse_pointer.setX(mx);
-        mouse_pointer.setY(my);
-        qDebug() << "--------------!" << QString::number(mx) << "" << QString::number(my) << "\n";
+            mouse_pointer.setX(mx);
+            mouse_pointer.setY(my);
+            //qDebug() << "--------------!" << QString::number(mx) << "" << QString::number(my) << "\n";
+            ui->FieldWidget->setCursor(Qt::BlankCursor);
+            this->repaint();
+        }
+        else{
+            ui->FieldWidget->setCursor(Qt::CrossCursor);
+        }
+        return;
+    }
+    if(show_pointer){
+        show_pointer = false;
+        ui->FieldWidget->setCursor(Qt::ArrowCursor);
         this->repaint();
     }
-    else if(show_pointer){
-        show_pointer = false;
-        this->repaint();
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent *event){
+    if(show_pointer && event->button() == Qt::LeftButton){
+        qDebug() << "Clicked!\n";
+        QKeyEvent key(QEvent::KeyPress, Qt::Key_8, Qt::NoModifier);
+        QApplication::sendEvent(this, &key);
+        if (key.isAccepted()) {
+            //everything is ok
+        }
+        else {
+            qDebug() << "something wrong\n";
+        }
     }
 }
