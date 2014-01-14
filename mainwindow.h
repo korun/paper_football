@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QFileDialog>
 
 #include "football_field.h"
 
@@ -21,7 +22,7 @@ public:
     ~MainWindow();
 
 protected:
-    FootballField field;
+    FootballField *field;
     void paintEvent(QPaintEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
@@ -34,6 +35,9 @@ private:
 
 private slots:
     void keyPressEvent(QKeyEvent *e);
+    void new_field();
+    void open();
+    void save();
     qint32 get_key_from_coord(int x, int y);
 };
 

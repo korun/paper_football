@@ -7,60 +7,66 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    field = new FootballField;
     ui->setupUi(this);
 }
 
 MainWindow::~MainWindow()
 {
+    delete field;
     delete ui;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e){
     bool success = false;
-    signed char pl = field.current_player;
+    signed char pl = field->current_player;
     switch(e->key()){
         case Qt::Key_Z:
         case Qt::Key_1:
-            success = field.try_step(1);
+            success = field->try_step(1);
             break;
         case Qt::Key_X:
         case Qt::Key_2:
-            success = field.try_step(2);
+            success = field->try_step(2);
             break;
         case Qt::Key_C:
         case Qt::Key_3:
-            success = field.try_step(3);
+            success = field->try_step(3);
             break;
         case Qt::Key_A:
         case Qt::Key_4:
-            success = field.try_step(4);
+            success = field->try_step(4);
             break;
         case Qt::Key_D:
         case Qt::Key_6:
-            success = field.try_step(6);
+            success = field->try_step(6);
             break;
         case Qt::Key_Q:
         case Qt::Key_7:
-            success = field.try_step(7);
+            success = field->try_step(7);
             break;
         case Qt::Key_W:
         case Qt::Key_8:
-            success = field.try_step(8);
+            success = field->try_step(8);
             break;
         case Qt::Key_E:
         case Qt::Key_9:
-            success = field.try_step(9);
+            success = field->try_step(9);
     }
     if (success){
         this->repaint();
-        if(pl != field.current_player){
-            if(field.current_player < 0)
-                QMessageBox::information(this, tr("Information"), tr("Red player kicks"));
-            else
-                QMessageBox::information(this, tr("Information"), tr("blue player kicks"));
-        }
-        if(field.penalty_mode){
-            QMessageBox::information(this, tr("Information"), tr("PENALTY!"));
+        if (field->winner){
+            QMessageBox::information(this, tr("Game over"), tr(field->winner > 0 ? "Blue player win!" : "Red player win!"));
+        } else {
+            if(pl != field->current_player){
+                if(field->current_player < 0)
+                    QMessageBox::information(this, tr("Information"), tr("Red player kicks"));
+                else
+                    QMessageBox::information(this, tr("Information"), tr("Blue player kicks"));
+            }
+            if(field->penalty_mode){
+                QMessageBox::information(this, tr("Information"), tr("PENALTY!"));
+            }
         }
     }
 }
@@ -102,11 +108,11 @@ void MainWindow::paintEvent(QPaintEvent *){
 
     int old_x = FIELD_WIDTH  / 2,
         old_y = FIELD_HEIGHT / 2;
-    std::vector<signed char>::iterator iterator = field.steps.begin();
-    while (iterator != field.steps.end()) {
+    std::vector<signed char>::iterator iterator = field->steps.begin();
+    while (iterator != field->steps.end()) {
         int index = abs((int) *iterator);
-        int x = old_x - PX_SCALE * field.KEYS[index][0];
-        int y = old_y - PX_SCALE * field.KEYS[index][1];
+        int x = old_x - PX_SCALE * field->KEYS[index][0];
+        int y = old_y - PX_SCALE * field->KEYS[index][1];
         painter.setPen(*iterator < 0 ? red_pen : blue_pen);
         painter.drawLine(old_x, top_offset + old_y, x, top_offset + y);
         old_x = x;
@@ -121,7 +127,7 @@ void MainWindow::paintEvent(QPaintEvent *){
     }
 
     // Ball marker
-    if(field.show_ball){
+    if(field->show_ball){
         painter.setPen(std_pen);
         painter.drawEllipse(QPointF(old_x, top_offset + old_y), 2, 2);
     }
@@ -131,8 +137,8 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
     int top_offset = ui->menuBar->height();
     int mx = event->pos().x(),
         my = event->pos().y(),
-        bx = FIELD_WIDTH  / 2 - PX_SCALE * field.ball.x,
-        by = FIELD_HEIGHT / 2 - PX_SCALE * field.ball.y + top_offset;
+        bx = FIELD_WIDTH  / 2 - PX_SCALE * field->ball.x,
+        by = FIELD_HEIGHT / 2 - PX_SCALE * field->ball.y + top_offset;
     int local_mx = mx % PX_SCALE,
         local_my = (my - top_offset) % PX_SCALE;
     if((mx <= bx + PX_SCALE * 3 + PX_SCALE / 3 && mx >= bx - PX_SCALE * 3 - PX_SCALE / 3) && // mouse x in -3..3
@@ -206,3 +212,48 @@ qint32 MainWindow::get_key_from_coord(int x, int y){
     // just in case
     return Qt::Key_5;
 }
+
+void MainWindow::open()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "",
+        tr("Text Files (*.txt);;C++ Files (*.cpp *.h)"));
+
+    if (fileName != "") {
+        QFile file(fileName);
+        if (!file.open(QIODevice::ReadOnly)) {
+            QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+            return;
+        }
+//        QTextStream in(&file);
+//        textEdit->setText(in.readAll());
+
+        file.close();
+    }
+}
+
+void MainWindow::save()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "",
+    tr("Text Files (*.txt);;C++ Files (*.cpp *.h)"));
+
+    if (fileName != "") {
+        QFile file(fileName);
+        if (!file.open(QIODevice::WriteOnly)) {
+            // error message
+        } else {
+//            QTextStream stream(&file);
+//            stream << textEdit->toPlainText();
+//            stream.flush();
+            file.close();
+        }
+    }
+}
+
+void MainWindow::new_field()
+{
+    delete field;
+    field = new FootballField;
+    this->repaint();
+}
+
+
