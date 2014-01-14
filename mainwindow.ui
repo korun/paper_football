@@ -40,6 +40,9 @@
     <height>821</height>
    </size>
   </property>
+  <property name="mouseTracking">
+   <bool>true</bool>
+  </property>
   <property name="windowTitle">
    <string>Paper Football</string>
   </property>
@@ -58,6 +61,9 @@
    </property>
    <property name="cursor">
     <cursorShape>ArrowCursor</cursorShape>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QMenuBar" name="menuBar">

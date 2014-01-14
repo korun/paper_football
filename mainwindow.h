@@ -24,9 +24,13 @@ public:
 protected:
     FootballField *field;
     void paintEvent(QPaintEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 
 private:
     Ui::MainWindow *ui;
+    bool show_pointer = false;
+    QPoint mouse_pointer;
+    std::vector<QPoint> mouse_points[6];
 
 public slots:
     void keyPressEvent(QKeyEvent *e);

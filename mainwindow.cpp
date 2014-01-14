@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QDebug>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -76,6 +78,7 @@ void MainWindow::paintEvent(QPaintEvent *){
     QPen blue_pen(QColor("#00f"), 1);
     QPen red_pen(QColor("#f00"), 1);
     QPen std_pen(QColor("#000"), 1);
+    QPen tip_pen(QColor("#be00be"), 1);
 
     int top_offset = ui->menuBar->height();
 
@@ -117,10 +120,53 @@ void MainWindow::paintEvent(QPaintEvent *){
         old_y = y;
         ++iterator;
     }
+
+    if(show_pointer){
+        painter.setPen(tip_pen);
+        // Without top_offset!
+        painter.drawEllipse(QPointF(mouse_pointer.x(), mouse_pointer.y()), 2, 2);
+    }
+
     // Ball marker
     if(field->show_ball){
         painter.setPen(std_pen);
         painter.drawEllipse(QPointF(old_x, top_offset + old_y), 2, 2);
+    }
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *event){
+    int top_offset = ui->menuBar->height();
+    int mx = event->pos().x(),
+        my = event->pos().y(),
+        bx = FIELD_WIDTH  / 2 - PX_SCALE * field.ball.x,
+        by = FIELD_HEIGHT / 2 - PX_SCALE * field.ball.y + top_offset;
+    int local_mx = mx % PX_SCALE,
+        local_my = (my - top_offset) % PX_SCALE;
+    if((mx <= bx + PX_SCALE * 3 + PX_SCALE / 3 && mx >= bx - PX_SCALE * 3 - PX_SCALE / 3) && // mouse x in -3..3
+       (my <= by + PX_SCALE * 3 + PX_SCALE / 3 && my >= by - PX_SCALE * 3 - PX_SCALE / 3) && // mouse y in -3..3
+       (local_mx <= PX_SCALE / 3 || local_mx >= PX_SCALE / 3 * 2)                         && // x and y can cling to grid point
+       (local_my <= PX_SCALE / 3 || local_my >= PX_SCALE / 3 * 2)
+    ){
+        qDebug() << "mouseMoveEvent!" << QString::number(mx) << "" << QString::number(my) << "\n";
+        if(local_mx <= PX_SCALE / 3)
+            mx -= local_mx;
+        else // if(local_mx >= PX_SCALE / 3 * 2)
+            mx += PX_SCALE - local_mx;
+        if(local_my <= PX_SCALE / 3)
+            my -= local_my;
+        else // if(local_my >= PX_SCALE / 3 * 2)
+            my += PX_SCALE - local_my;
+
+        show_pointer = true;
+
+        mouse_pointer.setX(mx);
+        mouse_pointer.setY(my);
+        qDebug() << "--------------!" << QString::number(mx) << "" << QString::number(my) << "\n";
+        this->repaint();
+    }
+    else if(show_pointer){
+        show_pointer = false;
+        this->repaint();
     }
 }
 
