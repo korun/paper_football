@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QFileDialog>
 
 #include "football_field.h"
 
@@ -21,14 +22,17 @@ public:
     ~MainWindow();
 
 protected:
-    FootballField field;
+    FootballField *field;
     void paintEvent(QPaintEvent *event);
 
 private:
     Ui::MainWindow *ui;
 
-private slots:
+public slots:
     void keyPressEvent(QKeyEvent *e);
+    void new_field();
+    void open();
+    void save();
 };
 
 #endif // MAINWINDOW_H
