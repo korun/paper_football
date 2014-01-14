@@ -36,6 +36,7 @@ FootballField::FootballField()
 
     // Мячик изначально в позиции 0:0
     current_player = 1; // 1 (blue) -1 (red)
+    winner = 0;
 }
 
 // Деструктор
@@ -60,11 +61,13 @@ bool FootballField::try_step(int key){
         signed char x = ball.x + KEYS[key][0],
                     y = ball.y + KEYS[key][1];
         if(red_win(x, y)){
+            winner = -1;
             qDebug() << "red player winner!\n";
             gameover = true;
             show_ball = false;
         }
         if(blue_win(x, y)){
+            winner = 1;
             qDebug() << "blue player winner!\n";
             gameover = true;
             show_ball = false;
@@ -104,11 +107,13 @@ bool FootballField::try_penalty(int key){
         if (FLD_POINT(x, y) != NULL && FLD_POINT(x, y)->is_wall)
             return false;
         if(red_win(x, y)){
+            winner = -1;
             qDebug() << "red player winner!\n";
             gameover = true;
             show_ball = false;
         }
         if(blue_win(x, y)){
+            winner = 1;
             qDebug() << "blue player winner!\n";
             gameover = true;
             show_ball = false;

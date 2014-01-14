@@ -54,14 +54,18 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
     }
     if (success){
         this->repaint();
-        if(pl != field->current_player){
-            if(field->current_player < 0)
-                QMessageBox::information(this, tr("Information"), tr("Red player kicks"));
-            else
-                QMessageBox::information(this, tr("Information"), tr("blue player kicks"));
-        }
-        if(field->penalty_mode){
-            QMessageBox::information(this, tr("Information"), tr("PENALTY!"));
+        if (field->winner){
+            QMessageBox::information(this, tr("Game over"), tr(field->winner > 0 ? "Blue player win!" : "Red player win!"));
+        } else {
+            if(pl != field->current_player){
+                if(field->current_player < 0)
+                    QMessageBox::information(this, tr("Information"), tr("Red player kicks"));
+                else
+                    QMessageBox::information(this, tr("Information"), tr("Blue player kicks"));
+            }
+            if(field->penalty_mode){
+                QMessageBox::information(this, tr("Information"), tr("PENALTY!"));
+            }
         }
     }
 }

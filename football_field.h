@@ -32,6 +32,7 @@ public:
     std::vector<signed char> steps;
     bool show_ball = true;
     signed char current_player;
+    signed char winner = 0;
     bool        penalty_mode = false;
 
     FootballField();
