@@ -170,7 +170,6 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
             show_pointer = true;
 
             if(field->penalty_mode){
-                int top_offset = ui->menuBar->height();
                 int index = get_key_from_coord(mx, my, bx, by);
 
                 mx = bx;
@@ -194,16 +193,25 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *event){
     if(show_pointer && event->button() == Qt::LeftButton){
-        qint32 key_num = get_key_from_coord(mouse_pointer.x(), mouse_pointer.y());
-        if(key_num == Qt::Key_5){
-            qDebug() << "Ball position!\n";
-            return;
-        }
-        QKeyEvent key(QEvent::KeyPress, key_num, Qt::NoModifier);
-        QApplication::sendEvent(this, &key);
+        int need_steps;
+        int s_x = abs(field->ball.x - mouse_pointer.x());
+        int s_y = abs(field->ball.y - mouse_pointer.y());
+        if(s_x > s_y)
+            need_steps = s_x / PX_SCALE;
+        else
+            need_steps = s_y / PX_SCALE;
+        for(int i = 0; i < need_steps; i++){
+            qint32 key_num = get_key_from_coord(mouse_pointer.x(), mouse_pointer.y());
+            if(key_num == Qt::Key_5){
+                qDebug() << "Ball position!\n";
+                return;
+            }
+            QKeyEvent key(QEvent::KeyPress, key_num, Qt::NoModifier);
+            QApplication::sendEvent(this, &key);
 
-        if (!key.isAccepted()) {
-            qDebug() << "something wrong\n";
+            if (!key.isAccepted()) {
+                qDebug() << "something wrong\n";
+            }
         }
     }
 }
