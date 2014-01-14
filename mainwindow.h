@@ -21,6 +21,11 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+    void new_field();
+    void open();
+    void save();
+
 protected:
     FootballField *field;
     void paintEvent(QPaintEvent *event);
@@ -32,13 +37,10 @@ private:
     bool show_pointer = false;
     QPoint mouse_pointer;
     std::vector<QPoint> mouse_points[6];
+    qint32 get_key_from_coord(int x, int y);
 
 private slots:
     void keyPressEvent(QKeyEvent *e);
-    void new_field();
-    void open();
-    void save();
-    qint32 get_key_from_coord(int x, int y);
 };
 
 #endif // MAINWINDOW_H
