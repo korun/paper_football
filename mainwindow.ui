@@ -60,7 +60,7 @@
     </size>
    </property>
    <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
+    <cursorShape>CrossCursor</cursorShape>
    </property>
    <property name="mouseTracking">
     <bool>true</bool>

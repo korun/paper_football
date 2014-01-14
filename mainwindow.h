@@ -38,6 +38,7 @@ private:
     QPoint mouse_pointer;
     std::vector<QPoint> mouse_points[6];
     qint32 get_key_from_coord(int x, int y);
+    int    get_key_from_coord(int x, int y, int bx, int by);
 
 private slots:
     void keyPressEvent(QKeyEvent *e);

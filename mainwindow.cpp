@@ -120,30 +120,41 @@ void MainWindow::paintEvent(QPaintEvent *){
         ++iterator;
     }
 
-    if(show_pointer){
-        painter.setPen(tip_pen);
-        // Without top_offset!
-        painter.drawEllipse(QPointF(mouse_pointer.x(), mouse_pointer.y()), 2, 2);
-    }
-
     // Ball marker
     if(field->show_ball){
         painter.setPen(std_pen);
         painter.drawEllipse(QPointF(old_x, top_offset + old_y), 2, 2);
     }
+
+    if(show_pointer){
+        painter.setPen(tip_pen);
+        // Without top_offset!
+        painter.drawEllipse(QPointF(mouse_pointer.x(), mouse_pointer.y()), 2, 2);
+
+        for(int i = 0; i < 6; i++){
+            int index = get_key_from_coord(mouse_pointer.x(), mouse_pointer.y(), old_x, top_offset + old_y);
+            int x = old_x - PX_SCALE * field->KEYS[index][0];
+            int y = old_y - PX_SCALE * field->KEYS[index][1];
+            painter.drawLine(old_x, top_offset + old_y, x, top_offset + y);
+            old_x = x;
+            old_y = y;
+        }
+    }
+
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent *event){
     int top_offset = ui->menuBar->height();
     int mx = event->pos().x(),
-        my = event->pos().y(),
-        bx = FIELD_WIDTH  / 2 - PX_SCALE * field->ball.x,
-        by = FIELD_HEIGHT / 2 - PX_SCALE * field->ball.y + top_offset;
-    int local_mx = mx % PX_SCALE,
-        local_my = (my - top_offset) % PX_SCALE;
-    if((mx <= bx + PX_SCALE * 3 + PX_SCALE / 3 && mx >= bx - PX_SCALE * 3 - PX_SCALE / 3) && // mouse x in -3..3
-       (my <= by + PX_SCALE * 3 + PX_SCALE / 3 && my >= by - PX_SCALE * 3 - PX_SCALE / 3)    // mouse y in -3..3
+        my = event->pos().y();
+    const int bx = FIELD_WIDTH  / 2 - PX_SCALE * field->ball.x,
+              by = FIELD_HEIGHT / 2 - PX_SCALE * field->ball.y + top_offset,
+              cells_count = (field->penalty_mode ? 6 : 3);
+    if((mx <= bx + PX_SCALE * cells_count + PX_SCALE / 3 && mx >= bx - PX_SCALE * cells_count - PX_SCALE / 3) && // mouse x in -3..3 or -6..6
+       (my <= by + PX_SCALE * cells_count + PX_SCALE / 3 && my >= by - PX_SCALE * cells_count - PX_SCALE / 3)    // mouse y in -3..3 or -6..6
     ){
+        const int local_mx = mx % PX_SCALE,
+                  local_my = (my - top_offset) % PX_SCALE;
         if((local_mx <= PX_SCALE / 3 || local_mx >= PX_SCALE / 3 * 2) && // x and y can cling to grid point
            (local_my <= PX_SCALE / 3 || local_my >= PX_SCALE / 3 * 2)
         ){
@@ -158,20 +169,25 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
 
             show_pointer = true;
 
+            if(field->penalty_mode){
+                int top_offset = ui->menuBar->height();
+                int index = get_key_from_coord(mx, my, bx, by);
+
+                mx = bx;
+                my = by;
+                for(int i = 0; i < 6; i++){
+                    mx = mx - PX_SCALE * field->KEYS[index][0];
+                    my = my - PX_SCALE * field->KEYS[index][1];
+                }
+            }
             mouse_pointer.setX(mx);
             mouse_pointer.setY(my);
-            //qDebug() << "--------------!" << QString::number(mx) << "" << QString::number(my) << "\n";
-            ui->FieldWidget->setCursor(Qt::BlankCursor);
             this->repaint();
-        }
-        else{
-            ui->FieldWidget->setCursor(Qt::CrossCursor);
         }
         return;
     }
     if(show_pointer){
         show_pointer = false;
-        ui->FieldWidget->setCursor(Qt::ArrowCursor);
         this->repaint();
     }
 }
@@ -211,6 +227,23 @@ qint32 MainWindow::get_key_from_coord(int x, int y){
 
     // just in case
     return Qt::Key_5;
+}
+
+int MainWindow::get_key_from_coord(int x, int y, int bx, int by){
+    // Don't move - this is a ball-point
+    if(x == bx && y == by) return 5;
+
+    if(x <  bx && y >  by) return 1;
+    if(x == bx && y >  by) return 2;
+    if(x >  bx && y >  by) return 3;
+    if(x <  bx && y == by) return 4;
+    if(x >  bx && y == by) return 6;
+    if(x <  bx && y <  by) return 7;
+    if(x == bx && y <  by) return 8;
+    if(x >  bx && y <  by) return 9;
+
+    // just in case
+    return 5;
 }
 
 void MainWindow::open()
