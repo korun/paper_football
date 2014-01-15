@@ -222,8 +222,8 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *event){
-    int top_offset = ui->menuBar->height();
-    if(show_pointer && event->button() == Qt::LeftButton){
+    if(show_pointer && field->winner == 0 && event->button() == Qt::LeftButton){
+        int top_offset = ui->menuBar->height();
         int need_steps;
         int bx = FIELD_WIDTH  / 2 - PX_SCALE * field->ball.x,
             by = FIELD_HEIGHT / 2 - PX_SCALE * field->ball.y + top_offset;
