@@ -36,7 +36,6 @@ FootballField::FootballField()
 
     // Мячик изначально в позиции 0:0
     current_player = 1; // 1 (blue) -1 (red)
-    winner = 0;
 }
 
 // Деструктор
@@ -149,6 +148,17 @@ bool FootballField::try_penalty(int key){
     else
         ++current_step;
     return true;
+}
+
+bool FootballField::can_step_from(signed char x, signed char y, int bx, int by){
+    const int old_x = ball.x,
+              old_y = ball.y;
+    ball.x = bx;
+    ball.y = by;
+    bool result = can_step(x, y);
+    ball.x = old_x;
+    ball.y = old_y;
+    return result;
 }
 
 bool FootballField::can_step(signed char x, signed char y){

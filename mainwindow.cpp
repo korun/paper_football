@@ -131,13 +131,22 @@ void MainWindow::paintEvent(QPaintEvent *){
         // Without top_offset!
         painter.drawEllipse(QPointF(mouse_pointer.x(), mouse_pointer.y()), 2, 2);
 
+        int ball_x = field->ball.x,
+            ball_y = field->ball.y;
+
         for(int i = 0; i < 6; i++){
             int index = get_key_from_coord(mouse_pointer.x(), mouse_pointer.y(), old_x, top_offset + old_y);
-            int x = old_x - PX_SCALE * field->KEYS[index][0];
-            int y = old_y - PX_SCALE * field->KEYS[index][1];
-            painter.drawLine(old_x, top_offset + old_y, x, top_offset + y);
-            old_x = x;
-            old_y = y;
+            if(field->penalty_mode || field->can_step_from(field->KEYS[index][0], field->KEYS[index][1], ball_x, ball_y)){
+                int x = old_x - PX_SCALE * field->KEYS[index][0];
+                int y = old_y - PX_SCALE * field->KEYS[index][1];
+                painter.drawLine(old_x, top_offset + old_y, x, top_offset + y);
+                old_x = x;
+                old_y = y;
+                ball_x += field->KEYS[index][0];
+                ball_y += field->KEYS[index][1];
+            }
+            else
+                break;
         }
     }
 

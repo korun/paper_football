@@ -39,6 +39,7 @@ public:
     FootballField();
     ~FootballField();
     bool try_step(int key);
+    bool can_step_from(signed char x, signed char y, int bx, int by);
 
 private:
     bool try_penalty(int key);
