@@ -68,13 +68,15 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
             if(field->penalty_mode){
                 QMessageBox::information(this, tr("Information"), tr("PENALTY!"));
             }
-        }
-        int direction = field->only_one_way();
-        if(direction){
-            qDebug() << "Auto move\n";
-            QKeyEvent key(QEvent::KeyPress, Qt::Key_0 + direction, Qt::NoModifier);
-            QApplication::sendEvent(this, &key);
-            if (!key.isAccepted()) qDebug() << "something wrong\n";
+            else{
+                int direction = field->only_one_way();
+                if(direction){
+                    qDebug() << "Auto move\n";
+                    QKeyEvent key(QEvent::KeyPress, Qt::Key_0 + direction, Qt::NoModifier);
+                    QApplication::sendEvent(this, &key);
+                    if (!key.isAccepted()) qDebug() << "something wrong\n";
+                }
+            }
         }
     }
 }
@@ -209,10 +211,13 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *event){
+    int top_offset = ui->menuBar->height();
     if(show_pointer && event->button() == Qt::LeftButton){
         int need_steps;
-        int s_x = abs(field->ball.x - mouse_pointer.x());
-        int s_y = abs(field->ball.y - mouse_pointer.y());
+        int bx = FIELD_WIDTH  / 2 - PX_SCALE * field->ball.x,
+            by = FIELD_HEIGHT / 2 - PX_SCALE * field->ball.y + top_offset;
+        int s_x = abs(bx - mouse_pointer.x());
+        int s_y = abs(by - mouse_pointer.y());
         if(s_x > s_y)
             need_steps = s_x / PX_SCALE;
         else
