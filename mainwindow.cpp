@@ -137,7 +137,7 @@ void MainWindow::paintEvent(QPaintEvent *){
         painter.drawEllipse(QPointF(old_x, top_offset + old_y), 2, 2);
     }
 
-    if(show_pointer){
+    if(show_pointer && field->winner == 0){
         painter.setPen(tip_pen);
         // Without top_offset!
         painter.drawEllipse(QPointF(mouse_pointer.x(), mouse_pointer.y()), 2, 2);
