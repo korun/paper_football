@@ -149,6 +149,22 @@ bool FootballField::try_penalty(int key){
     return true;
 }
 
+bool FootballField::can_penalty(int key){
+
+    if(!penalty_mode) return false;
+
+    signed char x = ball.x + KEYS[key][0],
+                y = ball.y + KEYS[key][1];
+
+    for(int i = 0; i < 6; i++){
+        if (FLD_POINT(x, y) != NULL && FLD_POINT(x, y)->is_wall)
+            return false;
+        x += KEYS[key][0];
+        y += KEYS[key][1];
+    }
+    return true;
+}
+
 bool FootballField::can_step_from(signed char x, signed char y, int bx, int by){
     const int old_x = ball.x,
               old_y = ball.y;
