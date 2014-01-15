@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QDebug>
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -59,7 +60,7 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
         if (field->winner){
             QMessageBox::information(this, tr("Game over"), tr(field->winner > 0 ? "Blue player win!" : "Red player win!"));
         }
-        else {
+        else if (!autoinput){
             if(pl != field->current_player){
                 if(field->current_player < 0)
                     QMessageBox::information(this, tr("Information"), tr("Red player kicks"));
@@ -291,7 +292,7 @@ int MainWindow::get_key_from_coord(int x, int y, int bx, int by){
 void MainWindow::open()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "",
-        tr("Text Files (*.txt);;C++ Files (*.cpp *.h)"));
+        tr("GameSave File (*.save);;All Files (*)"));
 
     if (fileName != "") {
         QFile file(fileName);
@@ -299,26 +300,41 @@ void MainWindow::open()
             QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
             return;
         }
-//        QTextStream in(&file);
-//        textEdit->setText(in.readAll());
-
+//        qDebug() << file.size() << endl;
+        QByteArray temp = file.readAll();
         file.close();
+        this->new_field();
+        autoinput = true;
+        for(int i=0; i<temp.size();i++){
+            QKeyEvent key(QEvent::KeyPress, Qt::Key_0+abs(temp[i]), Qt::NoModifier);
+            QApplication::sendEvent(this, &key);
+//            qDebug() << (signed char)temp[i] << endl;
+        }
+        autoinput = false;
     }
 }
 
 void MainWindow::save()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "",
-    tr("Text Files (*.txt);;C++ Files (*.cpp *.h)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
+        QDateTime::currentDateTime().toString(Qt::ISODate)+".save",
+        tr("GameSave File (*.save);;All Files (*)")
+    );
 
     if (fileName != "") {
         QFile file(fileName);
         if (!file.open(QIODevice::WriteOnly)) {
-            // error message
-        } else {
-//            QTextStream stream(&file);
-//            stream << textEdit->toPlainText();
-//            stream.flush();
+            QMessageBox::critical(this, tr("Error"), tr("Could not save file"));
+        } else {            
+            QDataStream stream(&file);
+            for(
+                std::vector<signed char>::iterator iterator = field->steps.begin();
+                iterator < field->steps.end();
+                iterator++
+               ) {
+                stream << *iterator;
+                qDebug() << *iterator;
+            }
             file.close();
         }
     }

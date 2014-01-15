@@ -35,6 +35,7 @@ protected:
 private:
     Ui::MainWindow *ui;
     bool show_pointer = false;
+    bool autoinput = false;
     QPoint mouse_pointer;
     qint32 get_key_from_coord(int x, int y);
     int    get_key_from_coord(int x, int y, int bx, int by);
