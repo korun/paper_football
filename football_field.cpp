@@ -125,9 +125,13 @@ bool FootballField::try_penalty(int key){
     // return to first point
     x = ball.x + KEYS[key][0];
     y = ball.y + KEYS[key][1];
+
+    // penalty sign
+    steps.push_back(PENALTY_SIGN);
+    steps.push_back(key * current_player);
+
     // Real ball moves
     for(int i = 0; i < 6; i++){
-        steps.push_back(key * current_player);
         if(FLD_POINT(x, y) == NULL)
             FLD_POINT(x, y) = new FPoint(x, y);
         FLD_POINT(x, y)->push(FLD_POINT(ball.x, ball.y));

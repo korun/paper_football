@@ -119,15 +119,25 @@ void MainWindow::paintEvent(QPaintEvent *){
 
     int old_x = FIELD_WIDTH  / 2,
         old_y = FIELD_HEIGHT / 2;
+    int loop = 1;
     std::vector<signed char>::iterator iterator = field->steps.begin();
     while (iterator != field->steps.end()) {
-        int index = abs((int) *iterator);
-        int x = old_x - PX_SCALE * field->KEYS[index][0];
-        int y = old_y - PX_SCALE * field->KEYS[index][1];
-        painter.setPen(*iterator < 0 ? red_pen : blue_pen);
-        painter.drawLine(old_x, top_offset + old_y, x, top_offset + y);
-        old_x = x;
-        old_y = y;
+        if(*iterator == PENALTY_SIGN){
+            loop = 6;
+        }
+        else {
+            int index = abs((int) *iterator);
+            painter.setPen(*iterator < 0 ? red_pen : blue_pen);
+
+            for(; loop > 0; loop--){
+                int x = old_x - PX_SCALE * field->KEYS[index][0];
+                int y = old_y - PX_SCALE * field->KEYS[index][1];
+                painter.drawLine(old_x, top_offset + old_y, x, top_offset + y);
+                old_x = x;
+                old_y = y;
+            }
+            loop = 1;
+        }
         ++iterator;
     }
 

@@ -11,6 +11,8 @@
 #define PH_CENTER    (FIELD_HEIGHT / PX_SCALE / 2)
 #define FLD_POINT(X, Y) (points[PW_CENTER + (X)][PH_CENTER + (Y)])
 
+#define PENALTY_SIGN 5 // using in steps
+
 class FootballField
 {
 
@@ -21,7 +23,7 @@ public:
         { 0, -1}, // 2
         {-1, -1}, // 3
         { 1,  0}, // 4
-        { 0,  0}, // 5 - unused
+        { 0,  0}, // 5 - using as penalty flag in steps
         {-1,  0}, // 6
         { 1,  1}, // 7
         { 0,  1}, // 8
