@@ -204,6 +204,18 @@ bool FootballField::penalty_kick(){
     return penalty_mode;
 }
 
+int FootballField::only_one_way(){
+    int has_one = 0;
+    for(int i = 1; i <= 9; i++){
+        if(i == 5) continue;
+        if(can_step(KEYS[i][0], KEYS[i][1])){
+            if(has_one) return 0;
+            has_one = i;
+        }
+    }
+    return has_one;
+}
+
 bool FootballField::can_move_1x(){
     for(int i = 1; i <= 9; i++){
         if(i == 5) continue;

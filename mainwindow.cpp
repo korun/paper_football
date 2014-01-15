@@ -57,7 +57,8 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
         this->repaint();
         if (field->winner){
             QMessageBox::information(this, tr("Game over"), tr(field->winner > 0 ? "Blue player win!" : "Red player win!"));
-        } else {
+        }
+        else {
             if(pl != field->current_player){
                 if(field->current_player < 0)
                     QMessageBox::information(this, tr("Information"), tr("Red player kicks"));
@@ -67,6 +68,13 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
             if(field->penalty_mode){
                 QMessageBox::information(this, tr("Information"), tr("PENALTY!"));
             }
+        }
+        int direction = field->only_one_way();
+        if(direction){
+            qDebug() << "Auto move\n";
+            QKeyEvent key(QEvent::KeyPress, Qt::Key_0 + direction, Qt::NoModifier);
+            QApplication::sendEvent(this, &key);
+            if (!key.isAccepted()) qDebug() << "something wrong\n";
         }
     }
 }
@@ -158,7 +166,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
         my = event->pos().y();
     const int bx = FIELD_WIDTH  / 2 - PX_SCALE * field->ball.x,
               by = FIELD_HEIGHT / 2 - PX_SCALE * field->ball.y + top_offset,
-              cells_count = (field->penalty_mode ? 6 : 3);
+              cells_count = (field->penalty_mode ? 6 : (3 - field->current_step + 1)); // because current_step start from 1
     if((mx <= bx + PX_SCALE * cells_count + PX_SCALE / 3 && mx >= bx - PX_SCALE * cells_count - PX_SCALE / 3) && // mouse x in -3..3 or -6..6
        (my <= by + PX_SCALE * cells_count + PX_SCALE / 3 && my >= by - PX_SCALE * cells_count - PX_SCALE / 3)    // mouse y in -3..3 or -6..6
     ){
@@ -217,10 +225,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
             }
             QKeyEvent key(QEvent::KeyPress, key_num, Qt::NoModifier);
             QApplication::sendEvent(this, &key);
-
-            if (!key.isAccepted()) {
-                qDebug() << "something wrong\n";
-            }
+            if (!key.isAccepted()) qDebug() << "something wrong\n";
         }
     }
 }

@@ -34,11 +34,13 @@ public:
     signed char current_player;
     signed char winner = 0;
     bool        penalty_mode = false;
+    unsigned char current_step = 1;
     Ball        ball;
 
     FootballField();
     ~FootballField();
     bool try_step(int key);
+    int  only_one_way();
     bool can_step_from(signed char x, signed char y, int bx, int by);
 
 private:
@@ -49,7 +51,6 @@ private:
     bool can_move_1x();
     bool can_move_3x();
     bool penalty_kick();
-    unsigned char current_step = 1;
     bool          gameover     = false;
 };
 
