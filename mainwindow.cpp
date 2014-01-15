@@ -54,6 +54,7 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
             success = field->try_step(9);
     }
     if (success){
+        show_pointer = false;
         this->repaint();
         if (field->winner){
             QMessageBox::information(this, tr("Game over"), tr(field->winner > 0 ? "Blue player win!" : "Red player win!"));
@@ -222,12 +223,16 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
             need_steps = s_x / PX_SCALE;
         else
             need_steps = s_y / PX_SCALE;
+        bool old_penalty = field->penalty_mode;
         for(int i = 0; i < need_steps; i++){
+            qDebug() << "Click!" << need_steps << "\n";
             qint32 key_num = get_key_from_coord(mouse_pointer.x(), mouse_pointer.y());
             if(key_num == Qt::Key_5){
                 qDebug() << "Ball position!\n";
                 return;
             }
+            if(field->penalty_mode != old_penalty)
+                return;
             QKeyEvent key(QEvent::KeyPress, key_num, Qt::NoModifier);
             QApplication::sendEvent(this, &key);
             if (!key.isAccepted()) qDebug() << "something wrong\n";

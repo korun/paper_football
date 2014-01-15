@@ -42,11 +42,11 @@ public:
     bool try_step(int key);
     int  only_one_way();
     bool can_penalty(int key);
+    bool can_step(signed char x, signed char y);
     bool can_step_from(signed char x, signed char y, int bx, int by);
 
 private:
     bool try_penalty(int key);
-    bool can_step(signed char x, signed char y);
     bool diagstep(signed char x, signed char y);
     bool can_diagstep(signed char bx, signed char by, signed char ex, signed char ey);
     bool can_move_1x();
