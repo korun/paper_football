@@ -106,15 +106,14 @@ bool FootballField::try_penalty(int key){
             winner = -1;
             qDebug() << "red player winner!\n";
             gameover = true;
-            show_ball = false;
         }
         if(blue_win(x, y)){
             winner = 1;
             qDebug() << "blue player winner!\n";
             gameover = true;
-            show_ball = false;
         }
         if(gameover){
+            show_ball = false;
             for(; i >= 0; i--)
                 steps.push_back(key * current_player);
             return true;
