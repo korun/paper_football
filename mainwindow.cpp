@@ -256,20 +256,7 @@ qint32 MainWindow::get_key_from_coord(int x, int y){
     int bx = FIELD_WIDTH  / 2 - PX_SCALE * field->ball.x,
         by = FIELD_HEIGHT / 2 - PX_SCALE * field->ball.y + top_offset;
 
-    // Don't move - this is a ball-point
-    if(x == bx && y == by) return Qt::Key_5;
-
-    if(x <  bx && y >  by) return Qt::Key_1;
-    if(x == bx && y >  by) return Qt::Key_2;
-    if(x >  bx && y >  by) return Qt::Key_3;
-    if(x <  bx && y == by) return Qt::Key_4;
-    if(x >  bx && y == by) return Qt::Key_6;
-    if(x <  bx && y <  by) return Qt::Key_7;
-    if(x == bx && y <  by) return Qt::Key_8;
-    if(x >  bx && y <  by) return Qt::Key_9;
-
-    // just in case
-    return Qt::Key_5;
+    return Qt::Key_0 + get_key_from_coord(x, y, bx, by);
 }
 
 int MainWindow::get_key_from_coord(int x, int y, int bx, int by){
