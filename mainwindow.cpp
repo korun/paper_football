@@ -56,7 +56,8 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
     }
     if (success){
         show_pointer = false;
-        this->repaint();
+        if (!autoinput)
+            this->repaint();
         if (field->winner){
             QMessageBox::information(this, tr("Game over"), tr(field->winner > 0 ? "Blue player win!" : "Red player win!"));
         }
