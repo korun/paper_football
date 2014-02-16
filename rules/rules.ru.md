@@ -13,13 +13,17 @@
 У ворот игроков имеются две полоски-штанги, в крайние точки которых ходить нельзя.
 И, разумеется, нельзя ходить за пределы поля.
 
-![](https://raw.github.com/kia84/paper_football/master/rules/img/01_steps_example.png)
+<div align="center">
+<img src="https://github.com/kia84/paper_football/blob/master/rules/img/01_steps_example.png?raw=true" alt="Steps example"/>
+</div>
 
 При возникновении ситуации когда после хода одного игрока второму некуда
 ходить (или как говорят когда один игрок "зажал" другого) пробивается
 пенальти - прямой удар на 6 клеток в любую сторону (примеры ниже).
 
-![](https://raw.github.com/kia84/paper_football/master/rules/img/02_penalty_example.png)
+<div align="center">
+<img src="https://github.com/kia84/paper_football/blob/master/rules/img/02_penalty_example.png?raw=true" alt="Penalty example"/>
+</div>
 
 Удар-пенальти может пересекать ранее нарисованные линии, и даже может быть
 направлен в сторону, откуда другому игроку вновь некуда ходить. В таком случае
@@ -27,7 +31,9 @@
 сделать свой ход.
 Но при том запрещается бить пенальти "туда-обратно".
 
-![](https://raw.github.com/kia84/paper_football/master/rules/img/03_multi_penalty_example.png)
+<div align="center">
+<img src="https://github.com/kia84/paper_football/blob/master/rules/img/03_multi_penalty_example.png?raw=true" alt="Multi-penalty example"/>
+</div>
 
 Также может возникнуть ситуация, когда игрок "зажимает" сам себя.
 То-есть длина хода игрока еще не равна трем клеткам, но ходить уже некуда.
@@ -35,7 +41,9 @@
 В этом случае пенальти пробивает другой игрок. Иногда такой манёвр проводят для того
 чтобы **заставить** другого игрока бить пенальти из заданной точки.
 
-![](https://raw.github.com/kia84/paper_football/master/rules/img/04_self_clamp.png)
+<div align="center">
+<img src="https://github.com/kia84/paper_football/blob/master/rules/img/04_self_clamp.png?raw=true" alt="Self clamp example"/>
+</div>
 
 ## Пользовательский интерфейс
 
