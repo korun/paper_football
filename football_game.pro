@@ -12,15 +12,18 @@ TARGET = paper_football
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    fpoint.cpp \
-    football_field.cpp \
-    ball.cpp
+SOURCES +=\
+    src/ball.cpp \
+    src/football_field.cpp \
+    src/fpoint.cpp \
+    src/main.cpp \
+    src/mainwindow.cpp
 
-HEADERS  += mainwindow.h \
-    fpoint.h \
-    football_field.h \
-    ball.h
+HEADERS  += \
+    src/ball.h \
+    src/football_field.h \
+    src/fpoint.h \
+    src/mainwindow.h
 
-FORMS    += mainwindow.ui
+FORMS    += \
+    forms/mainwindow.ui
