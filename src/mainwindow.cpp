@@ -122,6 +122,7 @@ void MainWindow::paintEvent(QPaintEvent *){
     int old_x = FIELD_WIDTH  / 2,
         old_y = FIELD_HEIGHT / 2;
     int loop = 1;
+    signed char last_player = 1;
     std::vector<signed char>::iterator iterator = field->steps.begin();
     while (iterator != field->steps.end()) {
         if(*iterator == PENALTY_SIGN){
@@ -129,7 +130,27 @@ void MainWindow::paintEvent(QPaintEvent *){
         }
         else {
             int index = abs((int) *iterator);
-            painter.setPen(*iterator < 0 ? red_pen : blue_pen);
+            signed char new_player;
+            QPen color;
+
+            if (*iterator < 0){
+                new_player = -1;
+                color = red_pen;
+            }
+            else{
+                new_player = 1;
+                color = blue_pen;
+            }
+
+            // Draw point at end of player's move
+            if (last_player != new_player){
+                qDebug() << "last_player != new_player " << last_player << "\n";
+                painter.setPen(std_pen);
+                painter.drawEllipse(QPointF(old_x, top_offset + old_y), 1, 1);
+                last_player = new_player;
+            }
+
+            painter.setPen(color);
 
             for(; loop > 0; loop--){
                 int x = old_x - PX_SCALE * field->KEYS[index][0];
@@ -138,6 +159,7 @@ void MainWindow::paintEvent(QPaintEvent *){
                 old_x = x;
                 old_y = y;
             }
+
             loop = 1;
         }
         ++iterator;
